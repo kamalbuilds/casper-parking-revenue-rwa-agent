@@ -1,0 +1,14 @@
+[
+  {
+    "holder": "operator_primary",
+    "shares": 60
+  },
+  {
+    "holder": "investor_fund_a",
+    "shares": 25
+  },
+  {
+    "holder": "municipality",
+    "shares": 15
+  }
+]

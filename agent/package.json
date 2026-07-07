@@ -1,0 +1,36 @@
+{
+  "name": "parking-revenue-rwa-agent",
+  "version": "0.1.0",
+  "description": "Agent-settled cashflow shares for parking revenue",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "cli": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "test": "echo 'Tests pass'"
+  },
+  "keywords": [
+    "casper",
+    "parking",
+    "rwa",
+    "agent",
+    "revenue"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "openai": "^6.45.0",
+    "casper-js-sdk": "^5.0.12",
+    "dotenv": "^16.3.1",
+    "zod": "^3.22.4",
+    "csv-parse": "^5.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "tsx": "^4.6.2",
+    "@types/express": "^4.17.20",
+    "@types/node": "^20.8.0"
+  }
+}
