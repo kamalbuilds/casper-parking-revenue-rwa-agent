@@ -29,10 +29,3 @@ Mock parking CSV, anomaly summary, revenue registry, payout split, investor dash
 ## Main risk
 
 Needs credible framing. Do not claim real operator integration unless real.
-
-## Docs
-
-- [PRD](PRD.md)
-- [Build Plan](BUILD_PLAN.md)
-- [Demo and Submission](DEMO_AND_SUBMISSION.md)
-- [Risk Register](RISK_REGISTER.md)
