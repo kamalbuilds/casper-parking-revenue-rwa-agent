@@ -295,7 +295,7 @@ mod tests {
 
     #[test]
     fn report_revenue_reverts_when_no_holders() {
-        let (env, mut contract) = setup();
+        let (env, contract) = setup();
 
         env.set_caller(env.get_account(0));
         assert_eq!(
