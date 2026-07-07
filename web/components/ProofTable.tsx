@@ -1,15 +1,8 @@
 "use client";
 
 import { deployExplorerUrl, formatTimestamp, truncateMiddle } from "@/lib/format";
+import type { ProofEvent } from "@/lib/types";
 import { useEffect, useState } from "react";
-
-interface ProofEvent {
-  time: string;
-  day: string;
-  reportHash: string;
-  totalDistributed: string;
-  deployHash: string;
-}
 
 type LoadState =
   | { status: "loading" }
@@ -57,6 +50,10 @@ export function ProofTable() {
         <h2>Proof</h2>
         <span className="badge">RevenueDistributed</span>
       </div>
+      <p className="card-sub">
+        Every successful settlement emits <code>RevenueDistributed</code>{" "}
+        on-chain. This table reads events directly from CSPR.cloud.
+      </p>
       {state.status === "loading" ? <p className="field-hint">Loading...</p> : null}
       {state.status === "unconfigured" ? (
         <div className="empty-state">
@@ -73,6 +70,7 @@ export function ProofTable() {
             <tr>
               <th>Time</th>
               <th>Day</th>
+              <th>Amount</th>
               <th>Report hash</th>
               <th>Deploy</th>
             </tr>
@@ -82,6 +80,7 @@ export function ProofTable() {
               <tr key={`${e.deployHash}-${e.reportHash}`}>
                 <td>{e.time ? formatTimestamp(e.time) : "—"}</td>
                 <td className="mono">{e.day || "—"}</td>
+                <td className="mono">{e.amount || "—"}</td>
                 <td className="mono">{truncateMiddle(e.reportHash, 8, 6)}</td>
                 <td className="mono">
                   {e.deployHash ? (

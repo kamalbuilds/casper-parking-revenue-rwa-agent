@@ -3,7 +3,12 @@ import * as fs from "fs";
 import * as path from "path";
 import { z } from "zod";
 import { runDailyReport, loadHolders } from "./agent";
-import { buildReportRevenueTransaction, transactionToSignableJson } from "./cspr";
+import {
+  REPORT_REVENUE_ENTRY_POINT,
+  buildReportRevenueTransaction,
+  csprToMotes,
+  transactionToSignableJson,
+} from "./cspr";
 import "dotenv/config";
 
 const app = express();
@@ -116,10 +121,12 @@ app.post("/api/run-agent-action", async (req: Request, res: Response) => {
       : `Blocked: ${report.anomaly_report.reasons.length} anomaly issue(s). ${report.anomaly_report.summary}`;
 
     const txArgs = {
+      entrypoint: REPORT_REVENUE_ENTRY_POINT,
       day: report.day,
       report_hash: report.report_hash,
       anomaly_ok: report.anomaly_ok,
       revenue_cspr: report.stats.total_revenue_cspr,
+      revenue_motes: csprToMotes(report.stats.total_revenue_cspr).toString(),
     };
 
     let transaction: object | null = null;

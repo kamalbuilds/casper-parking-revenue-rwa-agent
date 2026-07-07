@@ -1,23 +1,61 @@
 import { NextResponse } from "next/server";
+import type { ProofEvent } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-interface CsprCloudEvent {
+interface CsprCloudEventEnvelope {
   name?: string;
   event_name?: string;
+  contract_event_name?: string;
   timestamp?: string;
   deploy_hash?: string;
   transaction_hash?: string;
   data?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
-function pickString(data: Record<string, unknown> | undefined, key: string): string {
-  const v = data?.[key];
-  return typeof v === "string" ? v : v != null ? String(v) : "";
+function pickString(
+  envelope: CsprCloudEventEnvelope,
+  keys: string[]
+): string {
+  for (const key of keys) {
+    const fromData = envelope.data?.[key];
+    if (typeof fromData === "string") return fromData;
+    if (typeof fromData === "number") return String(fromData);
+
+    const fromTop = envelope[key];
+    if (typeof fromTop === "string") return fromTop;
+    if (typeof fromTop === "number") return String(fromTop);
+  }
+  return "";
+}
+
+function isRevenueDistributed(envelope: CsprCloudEventEnvelope): boolean {
+  const name =
+    envelope.name || envelope.event_name || envelope.contract_event_name;
+  if (name) {
+    return name === "RevenueDistributed";
+  }
+  return Boolean(envelope.data?.report_hash);
+}
+
+function toProofEvent(envelope: CsprCloudEventEnvelope): ProofEvent {
+  return {
+    time: envelope.timestamp || "",
+    day: pickString(envelope, ["day"]),
+    amount: pickString(envelope, [
+      "amount",
+      "total_distributed",
+      "totalDistributed",
+    ]),
+    reportHash: pickString(envelope, ["report_hash", "reportHash"]),
+    deployHash: envelope.deploy_hash || envelope.transaction_hash || "",
+  };
 }
 
 export async function GET() {
-  const contractHash = process.env.CONTRACT_HASH;
+  const contractHash =
+    process.env.CONTRACT_HASH || process.env.NEXT_PUBLIC_CONTRACT_HASH;
   const accessKey = process.env.CSPR_CLOUD_ACCESS_KEY;
   if (!contractHash || !accessKey) {
     return NextResponse.json({ configured: false, events: [] });
@@ -30,23 +68,27 @@ export async function GET() {
       cache: "no-store",
     });
     if (!res.ok) {
-      return NextResponse.json({ configured: true, error: `CSPR.cloud ${res.status}` }, { status: 502 });
+      return NextResponse.json(
+        { configured: true, error: `CSPR.cloud returned ${res.status}` },
+        { status: 502 }
+      );
     }
+
     const json = await res.json();
-    const raw: CsprCloudEvent[] = Array.isArray(json?.data) ? json.data : [];
-    const events = raw
-      .filter((e) => (e.name || e.event_name) === "RevenueDistributed")
-      .map((e) => ({
-        time: e.timestamp || "",
-        day: pickString(e.data, "day"),
-        reportHash: pickString(e.data, "report_hash"),
-        totalDistributed: pickString(e.data, "total_distributed"),
-        deployHash: e.deploy_hash || e.transaction_hash || "",
-      }));
+    const raw: CsprCloudEventEnvelope[] = Array.isArray(json?.data)
+      ? json.data
+      : Array.isArray(json)
+      ? json
+      : [];
+    const events = raw.filter(isRevenueDistributed).map(toProofEvent);
+
     return NextResponse.json({ configured: true, events });
   } catch (err) {
     return NextResponse.json(
-      { configured: true, error: err instanceof Error ? err.message : "fetch failed" },
+      {
+        configured: true,
+        error: err instanceof Error ? err.message : "fetch failed",
+      },
       { status: 502 }
     );
   }

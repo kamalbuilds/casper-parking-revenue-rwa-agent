@@ -2,7 +2,7 @@
 
 import { useClickRef } from "@make-software/csprclick-ui";
 import { useCsprAccount } from "@/lib/useCsprAccount";
-import { explorerDeployUrl } from "@/lib/cspr";
+import { deployExplorerUrl } from "@/lib/format";
 import type { AgentActionResponse } from "@/lib/types";
 import { formatCspr } from "@/lib/format";
 import { useState } from "react";
@@ -193,7 +193,7 @@ export function DailyReportForm() {
                 <p className={styles.txLink}>
                   Transaction:{" "}
                   <a
-                    href={explorerDeployUrl(signState.txHash)}
+                    href={deployExplorerUrl(signState.txHash)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mono"

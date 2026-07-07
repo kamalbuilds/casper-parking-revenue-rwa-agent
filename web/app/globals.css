@@ -55,6 +55,7 @@ code {
 .brand { font-size: 14px; font-weight: 600; color: var(--muted); }
 .hero h1 { font-size: 40px; font-weight: 600; margin: 0 0 12px; letter-spacing: -0.01em; }
 .hero-sub { color: var(--muted); max-width: 56ch; margin: 0 0 32px; }
+.grid { display: grid; gap: 24px; margin-bottom: 24px; }
 .wallet-chip { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); }
 .wallet-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 .wallet-connect { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
@@ -82,3 +83,8 @@ code {
 .proof-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .proof-table th, .proof-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); }
 .proof-table th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+
+@media (max-width: 640px) {
+  .hero h1 { font-size: 32px; }
+  .hero-top { flex-direction: column; align-items: flex-start; gap: 12px; }
+}

@@ -8,12 +8,12 @@ export function truncateMiddle(value: string, head = 6, tail = 6): string {
   return `${value.slice(0, head)}...${value.slice(-tail)}`;
 }
 
-export function deployExplorerUrl(deployHash: string): string {
-  return `${CSPR_EXPLORER_BASE}/deploy/${deployHash}`;
-}
-
 export function transactionExplorerUrl(transactionHash: string): string {
   return `${CSPR_EXPLORER_BASE}/transaction/${transactionHash}`;
+}
+
+export function deployExplorerUrl(deployHash: string): string {
+  return `${CSPR_EXPLORER_BASE}/deploy/${deployHash}`;
 }
 
 export function accountExplorerUrl(publicKeyHex: string): string {
