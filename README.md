@@ -4,8 +4,6 @@
 
 An AI agent that ingests daily parking revenue CSV files, runs anomaly detection, and settles pro-rata revenue distributions to tokenized cashflow holders through an on-chain Odra `RevenueSplitter` contract. Built with the Odra framework for Casper 2.0.
 
-**Repository:** [github.com/kamalbuilds/casper-parking-revenue-rwa-agent](https://github.com/kamalbuilds/casper-parking-revenue-rwa-agent)
-
 ---
 
 ## Table of Contents
@@ -78,7 +76,7 @@ A lot agent reports daily sessions from CSV data, revenue is attested with anoma
 +----------------------------------------------------------+
 |           Agent Backend (Express, port 3001)              |
 |  - POST /api/daily-report: Parse CSV, run anomaly check   |
-|  - POST /api/run-agent-action: Build signable transaction  |
+|  - POST /api/run-agent-action: Build signable transaction |
 |  - GET /api/holders: Load holder registry                 |
 +---------------------------+------------------------------+
                             |
